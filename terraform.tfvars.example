@@ -1,0 +1,7 @@
+# Copie para terraform.tfvars (gitignored) OU exporte RAILWAY_TOKEN no ambiente.
+# railway_token = "seu-railway-account-token"
+
+# Ids do projeto fiap-fase3 (ja preenchidos como default em variables.tf):
+# project_id          = "f32bf7af-1351-47c1-a7ea-e6b260445644"
+# environment_id      = "9d4f8472-1336-4027-9041-bcb0663225e1"
+# postgres_service_id = "3c816a90-f69d-4628-8812-eb3a35e8e014"

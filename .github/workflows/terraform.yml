@@ -1,0 +1,70 @@
+name: terraform
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pull-requests: write
+
+env:
+  TF_IN_AUTOMATION: "true"
+  RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
+
+jobs:
+  validate:
+    name: fmt • validate • plan
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: "1.9.8"
+
+      - name: Terraform fmt (check)
+        run: terraform fmt -check -recursive
+
+      - name: Terraform init
+        run: terraform init -input=false
+
+      - name: Terraform validate
+        run: terraform validate -no-color
+
+      - name: Terraform plan
+        if: ${{ env.RAILWAY_TOKEN != '' }}
+        run: terraform plan -input=false -no-color
+
+      - name: Aviso (sem secret)
+        if: ${{ env.RAILWAY_TOKEN == '' }}
+        run: echo "::warning::RAILWAY_TOKEN nao configurado — plan/apply pulados. Configure em Settings > Secrets > Actions."
+
+  apply:
+    name: apply (merge na main)
+    needs: validate
+    if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
+    runs-on: ubuntu-latest
+    environment: production
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: "1.9.8"
+
+      - name: Terraform init
+        run: terraform init -input=false
+
+      - name: Terraform apply
+        if: ${{ env.RAILWAY_TOKEN != '' }}
+        run: terraform apply -auto-approve -input=false -no-color
+
+      - name: Aviso (sem secret)
+        if: ${{ env.RAILWAY_TOKEN == '' }}
+        run: echo "::warning::RAILWAY_TOKEN nao configurado — apply pulado."
