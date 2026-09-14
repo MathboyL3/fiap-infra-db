@@ -13,7 +13,6 @@ Infraestrutura do **banco de dados gerenciado** (PostgreSQL no **Railway**), pro
 
 > Arquitetura, diagrama de componentes (cloud) e diagramas de sequência:
 > [fiap-app/docs/ARQUITETURA.md](https://github.com/MathboyL3/fiap-app/blob/main/docs/ARQUITETURA.md).
-> Guia de entrega: [fiap-app/docs/ENTREGA.md](https://github.com/MathboyL3/fiap-app/blob/main/docs/ENTREGA.md).
 
 ## Propósito
 Prover um **Postgres gerenciado de verdade** (backup, volume persistente, operação pelo provedor) e expor, de forma versionada, os dados de conexão que os demais repositórios consomem:
