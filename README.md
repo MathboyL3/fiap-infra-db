@@ -6,7 +6,7 @@ Infraestrutura do **banco de dados gerenciado** (PostgreSQL no **Railway**), pro
 
 | Repositório | Papel |
 |---|---|
-| [fiap-auth-lambda](https://github.com/MathboyL3/fiap-auth-lambda) | Autenticação por CPF → JWT (API Gateway + Lambda) |
+| [fiap-auth-lambda](https://github.com/MathboyL3/fiap-auth-lambda) | Autenticação por CPF → JWT (serverless Bun, Railway) |
 | [fiap-app](https://github.com/MathboyL3/fiap-app) | API principal da oficina (.NET / Kubernetes) |
 | [fiap-infra-k8s](https://github.com/MathboyL3/fiap-infra-k8s) | Infra do cluster (Terraform) |
 | [fiap-infra-db](https://github.com/MathboyL3/fiap-infra-db) | Banco de dados gerenciado (Terraform + Railway) |
@@ -18,7 +18,7 @@ Infraestrutura do **banco de dados gerenciado** (PostgreSQL no **Railway**), pro
 Prover um **Postgres gerenciado de verdade** (backup, volume persistente, operação pelo provedor) e expor, de forma versionada, os dados de conexão que os demais repositórios consomem:
 
 - **fiap-app** (API .NET) — `ConnectionStrings:Postgres`
-- **fiap-auth-lambda** (Function de auth CPF→JWT) — `DATABASE_URL`
+- **fiap-auth-lambda** (serviço serverless de auth CPF→JWT) — `DATABASE_URL`
 
 ## Tecnologias
 - **Terraform** (`>= 1.5`) + provider **terraform-community-providers/railway** `~> 0.6`
@@ -34,17 +34,17 @@ flowchart LR
     PROXY["TCP Proxy\ngondola.proxy.rlwy.net:11177"]
     PG --- PROXY
   end
-  subgraph Local["Ambiente local (LocalStack + K8s)"]
+  subgraph Consumers["Consumidores da connection string"]
     APP["fiap-app (.NET)"]
-    LAMBDA["fiap-auth-lambda (Node)"]
+    AUTH["fiap-auth (Bun, Railway)"]
   end
   TF["Terraform\n(fiap-infra-db)"] -->|gerencia/import| PG
   APP -->|Npgsql TCP| PROXY
-  LAMBDA -->|node-postgres TCP| PROXY
+  AUTH -->|node-postgres TCP| PROXY
 ```
 
 - **Acesso interno** (workloads dentro do Railway): `postgres.railway.internal:5432`.
-- **Acesso externo** (app/lambda locais): TCP proxy público `gondola.proxy.rlwy.net:11177`.
+- **Acesso externo** (fiap-auth no Railway e app K8s local): TCP proxy público `gondola.proxy.rlwy.net:11177`.
 
 ## Outputs (consumidos pelos outros repos)
 | Output | Descrição |

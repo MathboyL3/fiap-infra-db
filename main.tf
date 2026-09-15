@@ -5,7 +5,7 @@
 # oficial de Postgres do Railway (imagem ghcr.io/railwayapp-templates/postgres-ssl:18,
 # com volume persistente de 5 GB). O Terraform aqui GERENCIA o service Postgres
 # (importado) e expoe a connection string como output para os demais repos
-# (fiap-app e fiap-auth-lambda).
+# (fiap-app e fiap-auth-lambda — serviço serverless de auth).
 #
 # NOTA (ver ADR-0002): a leitura do TCP proxy via provider community retorna
 # "tcpProxies Not Authorized" com o token de conta. O proxy publico e, portanto,

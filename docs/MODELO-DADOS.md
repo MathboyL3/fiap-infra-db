@@ -22,8 +22,8 @@ O domínio da oficina é **fortemente transacional e relacional**:
 ## Ajustes no modelo relacional (Fase 3)
 O modelo da Fase 1/2 foi **mantido** (estável e validado). Os ajustes da Fase 3 são de **operação**, não de esquema:
 - Banco movido do cluster para serviço **gerenciado** (Railway) — mesma estrutura de tabelas.
-- Acesso externo via **TCP proxy** (app/lambda locais) e interno via `postgres.railway.internal`.
-- A **Lambda de autenticação** passa a ler a tabela `clientes` (consulta por CPF em `documento_numero`) — nenhum campo novo é necessário, pois o CPF já existe como `documento_numero` com `documento_tipo`.
+- Acesso externo via **TCP proxy** (fiap-auth no Railway e app K8s local) e interno via `postgres.railway.internal`.
+- O **serviço de autenticação** (fiap-auth) lê a tabela `clientes` (consulta por CPF em `documento_numero`) — nenhum campo novo é necessário, pois o CPF já existe como `documento_numero` com `documento_tipo`.
 
 ## Diagrama ER
 
