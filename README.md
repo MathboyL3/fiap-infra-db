@@ -6,7 +6,7 @@ Infraestrutura do **banco de dados gerenciado** (PostgreSQL no **Railway**), pro
 
 | Repositório | Papel |
 |---|---|
-| [fiap-auth-lambda](https://github.com/MathboyL3/fiap-auth-lambda) | Autenticação por CPF → JWT (serverless Bun, Railway) |
+| [fiap-auth-lambda](https://github.com/MathboyL3/fiap-auth-lambda) | Autenticação por CPF → JWT (Railway Function serverless, Bun) |
 | [fiap-app](https://github.com/MathboyL3/fiap-app) | API principal da oficina (.NET / Kubernetes) |
 | [fiap-infra-k8s](https://github.com/MathboyL3/fiap-infra-k8s) | Infra do cluster (Terraform) |
 | [fiap-infra-db](https://github.com/MathboyL3/fiap-infra-db) | Banco de dados gerenciado (Terraform + Railway) |
@@ -18,7 +18,7 @@ Infraestrutura do **banco de dados gerenciado** (PostgreSQL no **Railway**), pro
 Prover um **Postgres gerenciado de verdade** (backup, volume persistente, operação pelo provedor) e expor, de forma versionada, os dados de conexão que os demais repositórios consomem:
 
 - **fiap-app** (API .NET) — `ConnectionStrings:Postgres`
-- **fiap-auth-lambda** (serviço serverless de auth CPF→JWT) — `DATABASE_URL`
+- **fiap-auth-lambda** (Railway Function serverless de auth CPF→JWT) — `DATABASE_URL`
 
 ## Tecnologias
 - **Terraform** (`>= 1.5`) + provider **terraform-community-providers/railway** `~> 0.6`
